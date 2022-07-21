@@ -36,18 +36,18 @@ class FPGADriver(object):
 
     @classmethod
     def create(cls, vendor, *args, **kwargs):
-        list = []
-        for sclass in cls.__subclasses__():
-            list.append(sclass)
-            LOG.info("\n\n\n\n\n\n")
-            LOG.info(sclass)
-            LOG.info("\n\n\n\n\n\n")
+        # list = []
+        # for sclass in cls.__subclasses__():
+        #     list.append(sclass)
+        #     LOG.info("\n\n\n\n\n\n")
+        #     LOG.info(sclass)
+        #     LOG.info("\n\n\n\n\n\n")
 
-        for sclass in cls.__subclasses__():
+        for sclass in cls.__subclasses__(): # <- in teoria dovrebbe prendere anche la sottoclasse per le Xilinx ma niente
             vendor = VENDOR_MAPS.get(vendor, vendor)
             if vendor == sclass.VENDOR:
                 return sclass(*args, **kwargs)
-        raise LookupError("Not find the FPGA driver for vendor %s" % vendor)
+        raise LookupError("Not find the FPGA driver for vendor %s" % vendor) # -> mi dà sempre questo errore
 
     def __init__(self, *args, **kwargs):
         pass

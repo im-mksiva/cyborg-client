@@ -78,8 +78,8 @@ class AgentManager(periodic_task.PeriodicTasks):
     
     def custom_method(self, context):
         LOG.info("messaggio dalla scheda arancino: programmazione")
-        # driver = self.fpga_driver.create("xilinx")
-        ret = driver.program()        
+        # driver = self.fpga_driver.create("xilinx") -> visto che non andava ho forzato la presenza del mio driver sotto
+        ret = driver.program() # di questo driver faccio l'import direttamente in alto        
         return ret
 
     
