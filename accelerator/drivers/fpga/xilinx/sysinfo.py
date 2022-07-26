@@ -41,8 +41,8 @@ INSPUR_FPGA_INFO_PATTERN = re.compile(
     r"[\[](?P<vendor_id>[0-9a-fA-F]"
     r"{4}):(?P<product_id>[0-9a-fA-F]{4})].*")
 
-VENDOR_ID = "1bd4"
-VENDOR_MAPS = {"1bd4": "inspur"}
+VENDOR_ID = "a7100t"
+VENDOR_MAPS = {"a7100t": "xilinx"}
 
 
 @cyborg.privsep.sys_admin_pctxt.entrypoint

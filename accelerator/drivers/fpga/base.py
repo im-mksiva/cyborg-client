@@ -17,14 +17,18 @@
 Cyborg FPGA driver implementation.
 """
 
-# from cyborg.accelerator.drivers.fpga import utils
+from cyborg.accelerator.drivers.fpga import utils
+from cyborg.accelerator.drivers import fpga
+# from cyborg.accelerator.drivers.fpga.xilinx import driver
+import cyborg.accelerator.drivers.fpga.xilinx as test
+
 from oslo_log import log as logging
 
 LOG = logging.getLogger(__name__)
 
 VENDOR_MAPS = {"0x8086": "intel",
                "1bd4": 'inspur',
-               "xilinx": 'xilinx'}
+               "a7100t": 'xilinx'}
 
 
 class FPGADriver(object):
@@ -36,12 +40,10 @@ class FPGADriver(object):
 
     @classmethod
     def create(cls, vendor, *args, **kwargs):
-        # list = []
-        # for sclass in cls.__subclasses__():
-        #     list.append(sclass)
-        #     LOG.info("\n\n\n\n\n\n")
-        #     LOG.info(sclass)
-        #     LOG.info("\n\n\n\n\n\n")
+        
+        LOG.info("\n\n\n\n\n\n\n\n\n")
+        LOG.info(cls.__subclasses__())
+        LOG.info("\n\n\n\n\n\n\n\n\n")
 
         for sclass in cls.__subclasses__(): # <- in teoria dovrebbe prendere anche la sottoclasse per le Xilinx ma niente
             vendor = VENDOR_MAPS.get(vendor, vendor)

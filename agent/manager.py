@@ -21,7 +21,6 @@ from oslo_service import periodic_task
 from oslo_utils import uuidutils
 
 from cyborg.accelerator.drivers.fpga.base import FPGADriver
-from cyborg.accelerator.drivers.fpga.xilinx.driver import XilinxFPGADriver as driver
 from cyborg.agent.resource_tracker import ResourceTracker
 from cyborg.agent.rpcapi import AgentAPI
 from cyborg.common import exception
@@ -78,13 +77,13 @@ class AgentManager(periodic_task.PeriodicTasks):
     
     def custom_method(self, context):
         LOG.info("messaggio dalla scheda arancino: programmazione")
-        # driver = self.fpga_driver.create("xilinx") -> visto che non andava ho forzato la presenza del mio driver sotto
+        driver = self.fpga_driver.create("xilinx") # -> visto che non andava ho forzato la presenza del mio driver sotto
         ret = driver.program() # di questo driver faccio l'import direttamente in alto        
-        return ret
+        return
 
     
 
-    @periodic_task.periodic_task(run_immediately=True)
+    # @periodic_task.periodic_task(run_immediately=True)
     def update_available_resource(self, context, startup=True):
         """Update all kinds of accelerator resources from their drivers."""
         self._rt.update_usage(context)
