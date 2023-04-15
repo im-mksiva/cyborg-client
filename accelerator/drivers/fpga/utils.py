@@ -21,16 +21,16 @@ import glob
 import re
 
 
-VENDORS = ["intel", "inspur", "xilinx"]  # can extend, such as ["intel", "xilinx"]
+# VENDORS = ["intel", "inspur", "xilinx"]  # can extend, such as ["intel", "xilinx"]
 
-SYS_FPGA_PATH = "/sys/class/fpga"
-VENDORS_PATTERN = re.compile("|".join(["(%s)" % v for v in VENDORS]))
+# SYS_FPGA_PATH = "/sys/class/fpga"
+# VENDORS_PATTERN = re.compile("|".join(["(%s)" % v for v in VENDORS]))
 
 
-def discover_vendors():
-    vendors = set()
-    for p in glob.glob1(SYS_FPGA_PATH, "*"):
-        m = VENDORS_PATTERN.match(p)
-        if m:
-            vendors.add(m.group())
-    return list(vendors)
+# def discover_vendors():
+#     vendors = set()
+#     for p in glob.glob1(SYS_FPGA_PATH, "*"):
+#         m = VENDORS_PATTERN.match(p)
+#         if m:
+#             vendors.add(m.group())
+#     return list(vendors)

@@ -27,6 +27,7 @@ from cyborg.common import exception
 from cyborg.conductor import rpcapi as cond_api
 from cyborg.conf import CONF
 from cyborg.image.api import API as ImageAPI
+from cyborg.agent.sender import CyborgWampAgent
 
 
 LOG = logging.getLogger(__name__)
@@ -53,34 +54,40 @@ class AgentManager(periodic_task.PeriodicTasks):
         self.agent_api = AgentAPI()
         self.image_api = ImageAPI()
         self._rt = ResourceTracker(host, self.cond_api)
+        self.agent = CyborgWampAgent()
+        self.agent.exec()
+        
 
     def periodic_tasks(self, context, raise_on_error=False):
         return self.run_periodic_tasks(context, raise_on_error=raise_on_error)
 
-    def fpga_program(self, context):
-        bitstream_uuid = str(bitstream_uuid)
-        if not uuidutils.is_uuid_like(bitstream_uuid):
-            raise exception.InvalidUUID(uuid=bitstream_uuid)
-        download_path = tempfile.NamedTemporaryFile(suffix=".gbs",
-                                                    prefix=bitstream_uuid)
-        self.image_api.download(context,
-                                bitstream_uuid,
-                                dest_path=download_path.name)
-        try:
-            driver = self.fpga_driver.create(driver_name)
-            ret = driver.program(controlpath_id, download_path.name)
-            LOG.info('Driver program() API returned %s', ret)
-        finally:
-            LOG.debug('Remove tmp bitstream file: %s', download_path.name)
-            os.remove(download_path.name)
-        return ret
+    # def fpga_program(self, context):
+    #     bitstream_uuid = str(bitstream_uuid)
+    #     if not uuidutils.is_uuid_like(bitstream_uuid):
+    #         raise exception.InvalidUUID(uuid=bitstream_uuid)
+    #     download_path = tempfile.NamedTemporaryFile(suffix=".gbs",
+    #                                                 prefix=bitstream_uuid)
+    #     self.image_api.download(context,
+    #                             bitstream_uuid,
+    #                             dest_path=download_path.name)
+    #     try:
+    #         driver = self.fpga_driver.create(driver_name)
+    #         ret = driver.program(controlpath_id, download_path.name)
+    #         LOG.info('Driver program() API returned %s', ret)
+    #     finally:
+    #         LOG.debug('Remove tmp bitstream file: %s', download_path.name)
+    #         os.remove(download_path.name)
+    #     return ret
     
     def custom_method(self, context):
-        LOG.info("messaggio dalla scheda arancino: programmazione")
-        driver = self.fpga_driver.create("xilinx") # -> visto che non andava ho forzato la presenza del mio driver sotto
-        ret = driver.program() # di questo driver faccio l'import direttamente in alto        
-        return
+        driver = self.fpga_driver.create("xilinx")
+        ret = driver.program()
+        return "messaggio dalla scheda arancino: " + ret
 
+    def driver_creation(self, context, driver_name):
+        driver = self.fpga_driver.create(driver_name)
+        ret = driver.program()
+        return ret
     
 
     # @periodic_task.periodic_task(run_immediately=True)

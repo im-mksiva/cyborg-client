@@ -104,5 +104,6 @@ def get_vendor_maps():
             "1bd4": "inspur",
             "8086": "intel",
             "1099": "samsung",
-            "1cf2": "zte"
+            "1cf2": "zte",
+            "a7100t": "xilinx"
             }

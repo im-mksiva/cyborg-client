@@ -17,18 +17,16 @@
 Cyborg FPGA driver implementation.
 """
 
-from cyborg.accelerator.drivers.fpga import utils
-from cyborg.accelerator.drivers import fpga
-# from cyborg.accelerator.drivers.fpga.xilinx import driver
-import cyborg.accelerator.drivers.fpga.xilinx as test
-
+# from cyborg.accelerator.drivers.fpga import utils
+# from drivers.fpga.xilinx import driver
 from oslo_log import log as logging
 
 LOG = logging.getLogger(__name__)
 
+
 VENDOR_MAPS = {"0x8086": "intel",
                "1bd4": 'inspur',
-               "a7100t": 'xilinx'}
+               "xilinx": 'xilinx',}
 
 
 class FPGADriver(object):
@@ -40,16 +38,14 @@ class FPGADriver(object):
 
     @classmethod
     def create(cls, vendor, *args, **kwargs):
-        
-        LOG.info("\n\n\n\n\n\n\n\n\n")
         LOG.info(cls.__subclasses__())
         LOG.info("\n\n\n\n\n\n\n\n\n")
 
-        for sclass in cls.__subclasses__(): # <- in teoria dovrebbe prendere anche la sottoclasse per le Xilinx ma niente
+        for sclass in cls.__subclasses__():
             vendor = VENDOR_MAPS.get(vendor, vendor)
             if vendor == sclass.VENDOR:
                 return sclass(*args, **kwargs)
-        raise LookupError("Not find the FPGA driver for vendor %s" % vendor) # -> mi dà sempre questo errore
+        raise LookupError("Not find the FPGA driver for vendor %s" % vendor)
 
     def __init__(self, *args, **kwargs):
         pass

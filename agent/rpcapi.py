@@ -44,7 +44,6 @@ class AgentAPI(object):
     def __init__(self, topic=None):
         super(AgentAPI, self).__init__()
         self.topic = topic or constants.AGENT_TOPIC
-        LOG.info(topic)
         target = messaging.Target(topic=self.topic,
                                   version='1.0')
         serializer = objects_base.CyborgObjectSerializer()
@@ -63,13 +62,16 @@ class AgentAPI(object):
     #                       bitstream_uuid=bitstream_uuid,
     #                       driver_name=driver_name)
 
-    def fpga_program(self, context, hostname, hostname2):
-        LOG.info('Agent fpga_program: hostname: (%s) ' +
-                 'siamo nella funzione di programmazione')
+    def fpga_program(self, context, hostname):
+        LOG.info('siamo nella funzione di programmazione. Agent fpga_program: hostname -> controller')
         version = '1.0'
-        cctxt = self.client.prepare(server=hostname2, version=version)
-        LOG.info("dopo la creazione del client %s" ,hostname)
+        cctxt = self.client.prepare(server=hostname, version=version)
+        LOG.info("dopo la creazione del client rpc %s" ,hostname)
         # questa chiamata porta al manager dell'agent, idealmente nell'host dove si trova
         # la FPGA da programmare
         return cctxt.call(context, 'custom_method')
 
+    def driver_test(self, context, driver_name):
+        version = '1.0'
+        cctxt = self.client.prepare(server="yoga", version=version)
+        return cctxt.call(context, 'driver_creation', driver_name=driver_name)

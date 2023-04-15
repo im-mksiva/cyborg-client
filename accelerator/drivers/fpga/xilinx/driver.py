@@ -1,3 +1,4 @@
+
 # Copyright 2018 Lenovo, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -16,10 +17,12 @@
 """
 Cyborg Xilinx FPGA driver implementation.
 """
-
+from oslo_concurrency import processutils
 from cyborg.accelerator.drivers.fpga.base import FPGADriver
 from cyborg.accelerator.drivers.fpga.xilinx import sysinfo
+from oslo_log import log as logging
 
+LOG = logging.getLogger(__name__)
 
 class XilinxFPGADriver(FPGADriver):
     """Base class for Xilinx FPGA drivers.
@@ -36,8 +39,12 @@ class XilinxFPGADriver(FPGADriver):
     def discover(self):
         return sysinfo.fpga_tree()
 
-    def program(self, device_path, image):
-        return sysinfo.program(device_path.pcie_address, image)
+    def program(self):
+        cmd = ["xc3sprog", "-c", "nexys4", "/home/me/top.bit"]
+        # cmd = ["ls","-l"]
+        result = processutils.execute(*cmd)
+        LOG.info(result)
+        return "programmazione dal driver xilinx: "
 
     def check_program_status(self, device):
         return sysinfo.verify(device.pcie_address)
